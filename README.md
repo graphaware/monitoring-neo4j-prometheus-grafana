@@ -6,6 +6,6 @@ This is an example project accompanying GraphAware's blog post [Monitoring Neo4j
 The purpose of this is to get up and running with testing a Neo4j Causal Cluster Monitoring solution based on Prometheus and Grafana
 
 # Run
-Simply type `docker-compose up`. 
+Simply clone the repository and type `docker-compose up`.
 
-The script will create a folder called `monitoring-neo4j`, and install in it a Neo4j cluster of 3 core members and 1 read replica, Prometheus and Grafana already set up with a link to Prometheus, data source and the provisioned dashboard. A good starting point for experimenting! For more information read also our [Causal Cluster Quickstart](https://graphaware.com/neo4j/2018/01/03/casual-cluster-quickstart.html) post.
+The script will install in the main repository folder a Neo4j cluster of 3 core members and 1 read replica, Prometheus and Grafana. Everything is  already set up to work out-of-the-box, including the provisioned dashboard. A really good starting point for experimenting! For more information read also our [Causal Cluster Quickstart](https://graphaware.com/neo4j/2018/01/03/casual-cluster-quickstart.html) post.
