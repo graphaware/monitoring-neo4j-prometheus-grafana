@@ -4,34 +4,25 @@ global:
   evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
   # scrape_timeout is set to the global default (10s).
 
-# Alertmanager configuration
-alerting:
-  alertmanagers:
-    - static_configs:
-        - targets:
-          # - alertmanager:9093
-
-# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
-rule_files:
-# - "first_rules.yml"
-# - "second_rules.yml"
-
 # A scrape configuration containing exactly one endpoint to scrape:
 # Here it's Prometheus itself.
 scrape_configs:
   # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
   - job_name: 'prometheus'
-
     # metrics_path defaults to '/metrics'
     # scheme defaults to 'http'.
-
     static_configs:
       - targets: ['localhost:9090']
 
   - job_name: 'neo4j-prometheus'
-#    scrape_interval: 10s
+    scrape_interval: 10s
     static_configs:
       # target: ip address of the Neo4j server (list of instances for cluster)
       - targets: ['neo4j-core1:2004', 'neo4j-core2:2005', 'neo4j-core3:2006', 'neo4j-replica1:2007']
 #      - targets: ['neo4j-core1:2004']
 
+  - job_name: 'cadvisor'
+    # Override the global default and scrape targets from this job every 5 seconds.
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['cadvisor:8080']

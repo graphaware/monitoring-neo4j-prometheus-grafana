@@ -18,8 +18,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 1,
-  "iteration": 1560523174319,
+  "iteration": 1560782932343,
   "links": [],
   "panels": [
     {
@@ -173,7 +172,7 @@
         "x": 6,
         "y": 1
       },
-      "id": 126,
+      "id": 137,
       "interval": null,
       "links": [],
       "mappingType": 1,
@@ -205,7 +204,7 @@
       ],
       "repeat": null,
       "repeatDirection": "h",
-      "repeatIteration": 1560523174319,
+      "repeatIteration": 1560782932343,
       "repeatPanelId": 5,
       "scopedVars": {
         "neo4j_instance": {
@@ -284,7 +283,7 @@
         "x": 12,
         "y": 1
       },
-      "id": 127,
+      "id": 138,
       "interval": null,
       "links": [],
       "mappingType": 1,
@@ -316,7 +315,7 @@
       ],
       "repeat": null,
       "repeatDirection": "h",
-      "repeatIteration": 1560523174319,
+      "repeatIteration": 1560782932343,
       "repeatPanelId": 5,
       "scopedVars": {
         "neo4j_instance": {
@@ -395,7 +394,7 @@
         "x": 18,
         "y": 1
       },
-      "id": 128,
+      "id": 139,
       "interval": null,
       "links": [],
       "mappingType": 1,
@@ -427,7 +426,7 @@
       ],
       "repeat": null,
       "repeatDirection": "h",
-      "repeatIteration": 1560523174319,
+      "repeatIteration": 1560782932343,
       "repeatPanelId": 5,
       "scopedVars": {
         "neo4j_instance": {
@@ -528,19 +527,32 @@
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
-      "seriesOverrides": [],
+      "seriesOverrides": [
+        {
+          "alias": "relatio"
+        }
+      ],
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
       "targets": [
         {
-          "expr": "label_replace({__name__=~\"neo4j_ids_in_use_.+\", job=\"$job\", instance=~\"$neo4j_instance\"}, \"label\", \"$1\", \"__name__\", \"neo4j_ids_in_use_(.+)\")",
+          "expr": "label_replace({__name__=~\"neo4j_ids_in_use_(node|property|relationship)\", job=\"$job\", instance=~\"$neo4j_instance\"}, \"label\", \"$1\", \"__name__\", \"neo4j_ids_in_use_(.+)\")",
           "format": "time_series",
           "hide": false,
           "instant": false,
           "intervalFactor": 2,
           "legendFormat": "# {{label}} {{instance}}",
           "refId": "F"
+        },
+        {
+          "expr": "neo4j_ids_in_use_relationship_type{job=\"$job\", instance=~\"$neo4j_instance\"}",
+          "format": "time_series",
+          "hide": false,
+          "instant": false,
+          "intervalFactor": 2,
+          "legendFormat": "# relationship type {{instance}}",
+          "refId": "A"
         }
       ],
       "thresholds": [],
@@ -628,7 +640,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(neo4j_ids_in_use_node{job=\"$job\", instance=~\"$neo4j_instance\"}[5m])",
+          "expr": "rate(neo4j_ids_in_use_node{job=\"$job\", instance=~\"$neo4j_instance\"}[$interval])",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -636,7 +648,7 @@
           "refId": "F"
         },
         {
-          "expr": "rate(neo4j_ids_in_use_relationship{job=\"$job\", instance=~\"$neo4j_instance\"}[5m])",
+          "expr": "rate(neo4j_ids_in_use_relationship{job=\"$job\", instance=~\"$neo4j_instance\"}[$interval])",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -644,7 +656,7 @@
           "refId": "A"
         },
         {
-          "expr": "rate(neo4j_ids_in_use_property{job=\"$job\", instance=~\"$neo4j_instance\"}[5m])",
+          "expr": "rate(neo4j_ids_in_use_property{job=\"$job\", instance=~\"$neo4j_instance\"}[$interval])",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -759,7 +771,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "irate(neo4j_ids_in_use_node{job='$job', instance=\"$leader\"}[5m])",
+          "expr": "irate(neo4j_ids_in_use_node{job='$job', instance=\"$leader\"}[$interval])",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -842,7 +854,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "irate(neo4j_ids_in_use_relationship{job=\"$job\", instance=\"$leader\"}[5m])",
+          "expr": "irate(neo4j_ids_in_use_relationship{job=\"$job\", instance=\"$leader\"}[$interval])",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -926,7 +938,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "irate(neo4j_ids_in_use_property{job='$job', instance=\"$leader\"}[5m])",
+          "expr": "irate(neo4j_ids_in_use_property{job='$job', instance=\"$leader\"}[$interval])",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -1047,15 +1059,15 @@
       "colorBackground": false,
       "colorValue": false,
       "colors": [
-        "#299c46",
+        "#d44a3a",
         "rgba(237, 129, 40, 0.89)",
-        "#d44a3a"
+        "#299c46"
       ],
       "datasource": "Prometheus",
       "description": "Instant rate",
       "format": "none",
       "gauge": {
-        "maxValue": 10,
+        "maxValue": 8,
         "minValue": 0,
         "show": true,
         "thresholdLabels": false,
@@ -1105,13 +1117,13 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "irate(neo4j_transaction_committed_total{job='$job', instance=\"$leader\"}[5m])",
+          "expr": "irate(neo4j_transaction_committed_total{job='$job', instance=\"$leader\"}[$interval])",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
         }
       ],
-      "thresholds": "",
+      "thresholds": "2,4",
       "title": "Committed Transaction Speed",
       "transparent": true,
       "type": "singlestat",
@@ -1130,7 +1142,7 @@
       "colorBackground": false,
       "colorValue": false,
       "colors": [
-        "#299c46",
+        "#73BF69",
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
@@ -1138,7 +1150,7 @@
       "description": "Instant rate",
       "format": "none",
       "gauge": {
-        "maxValue": 10,
+        "maxValue": 8,
         "minValue": 0,
         "show": true,
         "thresholdLabels": false,
@@ -1188,13 +1200,13 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "irate(neo4j_transaction_rollbacks_total{job=\"$job\", instance=\"$leader\"}[5m])",
+          "expr": "irate(neo4j_transaction_rollbacks_total{job=\"$job\", instance=\"$leader\"}[$interval])",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
         }
       ],
-      "thresholds": "",
+      "thresholds": "2,4",
       "title": "Rolled back Transaction Speed",
       "transparent": true,
       "type": "singlestat",
@@ -1362,7 +1374,7 @@
         {
           "expr": "neo4j_transaction_committed_write_total{job='$job', instance=~\"$neo4j_instance\"}",
           "format": "time_series",
-          "hide": false,
+          "hide": true,
           "intervalFactor": 1,
           "legendFormat": "Committed Write Tr.s {{instance}}",
           "refId": "C"
@@ -1537,19 +1549,27 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "label_replace({__name__=~\"neo4j_transaction_active.*\", job='$job'}, \"label\", \"$1\", \"__name__\", \"neo4j_transaction_(.+)\")",
+          "expr": "neo4j_transaction_active_read{job=\"$job\", instance=~\"$neo4j_instance\"}",
           "format": "time_series",
-          "intervalFactor": 3,
-          "legendFormat": "{{label}}",
-          "refId": "A"
+          "hide": false,
+          "intervalFactor": 1,
+          "legendFormat": "Active read {{instance}}",
+          "refId": "C"
         },
         {
-          "expr": "label_replace({__name__=~\"neo4j_transaction_peak.*\", job='$job'}, \"label\", \"$1\", \"__name__\", \"neo4j_transaction_(.+)\")",
+          "expr": "neo4j_transaction_active_write{job=\"$job\", instance=~\"$neo4j_instance\"}",
           "format": "time_series",
-          "instant": false,
-          "intervalFactor": 3,
-          "legendFormat": "{{label}}",
-          "refId": "B"
+          "hide": false,
+          "intervalFactor": 1,
+          "legendFormat": "Active write {{instance}}",
+          "refId": "D"
+        },
+        {
+          "expr": "neo4j_transaction_peak_concurrent_total{job=\"$job\", instance=~\"$neo4j_instance\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Peak concurrent {{instance}}",
+          "refId": "A"
         }
       ],
       "thresholds": [],
@@ -1634,7 +1654,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(neo4j_transaction_committed_read_total{job='$job', instance=~\"$neo4j_instance\"}[5m])",
+          "expr": "rate(neo4j_transaction_committed_read_total{job='$job', instance=~\"$neo4j_instance\"}[$interval])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -1723,7 +1743,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(neo4j_transaction_committed_write_total{job='$job', instance=~\"$neo4j_instance\"}[5m])",
+          "expr": "rate(neo4j_transaction_committed_write_total{job='$job', instance=~\"$neo4j_instance\"}[$interval])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "rate {{instance}}",
@@ -1812,14 +1832,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(neo4j_transaction_committed_total{job='$job', instance=~\"$neo4j_instance\"}[5m])",
+          "expr": "rate(neo4j_transaction_committed_total{job='$job', instance=~\"$neo4j_instance\"}[$interval])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "rate {{instance}}",
           "refId": "A"
         },
         {
-          "expr": "irate(neo4j_transaction_committed_total{job='$job', instance=~\"$neo4j_instance\"}[5m])",
+          "expr": "irate(neo4j_transaction_committed_total{job='$job', instance=~\"$neo4j_instance\"}[$interval])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "iRate {{instance}}",
@@ -1919,9 +1939,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "com_graphaware_neo4j_monitoring_MonitorProcedure_my_timer * 1000",
+          "expr": "com_graphaware_neo4j_monitoring_MonitorProcedure_my_timer * 10000",
           "format": "time_series",
           "intervalFactor": 1,
+          "legendFormat": "",
           "refId": "A"
         }
       ],
@@ -1942,7 +1963,9 @@
         "mode": "histogram",
         "name": null,
         "show": true,
-        "values": []
+        "values": [
+          "total"
+        ]
       },
       "yaxes": [
         {
@@ -2032,7 +2055,7 @@
       "lines": true,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "options": {},
       "percentage": false,
       "pointradius": 2,
@@ -2044,7 +2067,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(com_graphaware_neo4j_monitoring_MonitorProcedure_my_counter[5m])",
+          "expr": "irate(com_graphaware_neo4j_monitoring_MonitorProcedure_my_counter[$interval])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "rate {{instance}}",
@@ -2057,7 +2080,8 @@
           "fill": true,
           "line": true,
           "op": "gt",
-          "value": 2000
+          "value": 2000,
+          "yaxis": "left"
         }
       ],
       "timeFrom": null,
@@ -2102,103 +2126,12 @@
       }
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Prometheus",
-      "description": "Processing and Queuing time per bolt message",
-      "fill": 1,
-      "gridPos": {
-        "h": 9,
-        "w": 8,
-        "x": 16,
-        "y": 35
-      },
-      "id": 125,
-      "legend": {
-        "avg": false,
-        "current": true,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {},
-      "paceLength": 10,
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "rate(neo4j_bolt_accumulated_processing_time_total{job=\"$job\", instance=~\"$neo4j_instance\"}[5m])",
-          "format": "time_series",
-          "hide": false,
-          "instant": false,
-          "intervalFactor": 1,
-          "legendFormat": "Processing time per msg {{instance}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Bolt rate of message processing time",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "transparent": true,
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "ms",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 44
+        "y": 43
       },
       "id": 21,
       "panels": [],
@@ -2211,13 +2144,13 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
-      "description": "All Bolt Messages (done, failed, received, started)",
+      "description": "",
       "fill": 1,
       "gridPos": {
         "h": 9,
         "w": 8,
         "x": 0,
-        "y": 45
+        "y": 44
       },
       "id": 18,
       "legend": {
@@ -2245,7 +2178,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "label_replace({__name__=~\"neo4j_bolt_messages_.*\", job='$job', instance=~\"$neo4j_instance\"}, \"label\", \"$1\", \"__name__\", \"neo4j_(.+)\")",
+          "expr": "label_replace({__name__=~\"neo4j_bolt_messages_(done|failed)_total\", job='$job', instance=~\"$neo4j_instance\"}, \"label\", \"$1\", \"__name__\", \"neo4j_bolt_messages_(.+)\")",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -2257,7 +2190,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Bolt Messages",
+      "title": "Bolt Messages (done vs failed)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -2307,7 +2240,7 @@
         "h": 9,
         "w": 8,
         "x": 8,
-        "y": 45
+        "y": 44
       },
       "id": 25,
       "legend": {
@@ -2359,7 +2292,7 @@
           "refId": "C"
         },
         {
-          "expr": "rate(neo4j_bolt_messages_received_total{job=\"$job\", instance=~\"$neo4j_instance\"}[5m])",
+          "expr": "rate(neo4j_bolt_messages_received_total{job=\"$job\", instance=~\"$neo4j_instance\"}[$interval])",
           "format": "time_series",
           "hide": true,
           "instant": false,
@@ -2368,7 +2301,7 @@
           "refId": "B"
         },
         {
-          "expr": "rate(neo4j_bolt_messages_started_total{job=\"$job\", instance=~\"$neo4j_instance\"}[5m])",
+          "expr": "rate(neo4j_bolt_messages_started_total{job=\"$job\", instance=~\"$neo4j_instance\"}[$interval])",
           "format": "time_series",
           "hide": true,
           "instant": false,
@@ -2431,7 +2364,7 @@
         "h": 9,
         "w": 8,
         "x": 16,
-        "y": 45
+        "y": 44
       },
       "id": 58,
       "legend": {
@@ -2459,7 +2392,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(neo4j_bolt_accumulated_queue_time_total{job=\"$job\", instance=~\"$neo4j_instance\"}[5m])",
+          "expr": "rate(neo4j_bolt_accumulated_queue_time_total{job=\"$job\", instance=~\"$neo4j_instance\"}[$interval])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -2519,7 +2452,7 @@
         "h": 9,
         "w": 8,
         "x": 0,
-        "y": 54
+        "y": 53
       },
       "id": 31,
       "legend": {
@@ -2608,7 +2541,7 @@
         "h": 9,
         "w": 8,
         "x": 8,
-        "y": 54
+        "y": 53
       },
       "id": 33,
       "legend": {
@@ -2698,7 +2631,7 @@
         "h": 9,
         "w": 8,
         "x": 16,
-        "y": 54
+        "y": 53
       },
       "id": 57,
       "legend": {
@@ -2726,12 +2659,12 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(neo4j_bolt_accumulated_processing_time_total{job=\"$job\", instance=~\"$neo4j_instance\"}[5m])",
+          "expr": "rate(neo4j_bolt_accumulated_processing_time_total{job=\"$job\", instance=~\"$neo4j_instance\"}[$interval])",
           "format": "time_series",
           "hide": false,
           "instant": false,
           "intervalFactor": 1,
-          "legendFormat": "Processing time per msg {{instance}}",
+          "legendFormat": "{{instance}}",
           "refId": "A"
         }
       ],
@@ -2783,7 +2716,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 63
+        "y": 62
       },
       "id": 29,
       "panels": [],
@@ -2802,7 +2735,7 @@
         "h": 9,
         "w": 8,
         "x": 0,
-        "y": 64
+        "y": 63
       },
       "id": 61,
       "legend": {
@@ -2891,7 +2824,7 @@
         "h": 9,
         "w": 8,
         "x": 8,
-        "y": 64
+        "y": 63
       },
       "id": 71,
       "legend": {
@@ -2919,7 +2852,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(neo4j_page_cache_page_faults_total{job=\"$job\", instance=~\"$neo4j_instance\"}[5m])",
+          "expr": "rate(neo4j_page_cache_page_faults_total{job=\"$job\", instance=~\"$neo4j_instance\"}[$interval])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -2980,7 +2913,7 @@
         "h": 9,
         "w": 8,
         "x": 16,
-        "y": 64
+        "y": 63
       },
       "id": 74,
       "legend": {
@@ -3008,14 +2941,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(neo4j_page_cache_pins_total{job=\"$job\", instance=~\"$neo4j_instance\"}[5m])",
+          "expr": "rate(neo4j_page_cache_pins_total{job=\"$job\", instance=~\"$neo4j_instance\"}[$interval])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "pins {{instance}}",
           "refId": "B"
         },
         {
-          "expr": "rate(neo4j_page_cache_unpins_total{job=\"$job\", instance=~\"$neo4j_instance\"}[5m])",
+          "expr": "rate(neo4j_page_cache_unpins_total{job=\"$job\", instance=~\"$neo4j_instance\"}[$interval])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "unpins {{instance}}",
@@ -3076,7 +3009,7 @@
         "h": 9,
         "w": 8,
         "x": 0,
-        "y": 73
+        "y": 72
       },
       "id": 63,
       "legend": {
@@ -3104,14 +3037,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(neo4j_page_cache_evictions_total{job=\"$job\", instance=~\"$neo4j_instance\"}[5m])",
+          "expr": "rate(neo4j_page_cache_evictions_total{job=\"$job\", instance=~\"$neo4j_instance\"}[$interval])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "evictions{{instance}}",
           "refId": "A"
         },
         {
-          "expr": "rate(neo4j_page_cache_eviction_exceptions_total{job=\"$job\", instance=~\"$neo4j_instance\"}[5m])",
+          "expr": "rate(neo4j_page_cache_eviction_exceptions_total{job=\"$job\", instance=~\"$neo4j_instance\"}[$interval])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "eviction exceptions {{instance}}",
@@ -3173,7 +3106,7 @@
         "h": 9,
         "w": 8,
         "x": 8,
-        "y": 73
+        "y": 72
       },
       "id": 72,
       "legend": {
@@ -3263,7 +3196,7 @@
         "h": 9,
         "w": 8,
         "x": 16,
-        "y": 73
+        "y": 72
       },
       "id": 62,
       "legend": {
@@ -3352,7 +3285,7 @@
         "h": 9,
         "w": 8,
         "x": 0,
-        "y": 82
+        "y": 81
       },
       "id": 66,
       "legend": {
@@ -3441,7 +3374,7 @@
         "h": 9,
         "w": 8,
         "x": 8,
-        "y": 82
+        "y": 81
       },
       "id": 70,
       "legend": {
@@ -3469,7 +3402,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(neo4j_page_cache_hits_total{job=\"$job\", instance=~\"$neo4j_instance\"}[5m])",
+          "expr": "rate(neo4j_page_cache_hits_total{job=\"$job\", instance=~\"$neo4j_instance\"}[$interval])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -3530,7 +3463,7 @@
         "h": 9,
         "w": 8,
         "x": 16,
-        "y": 82
+        "y": 81
       },
       "id": 73,
       "legend": {
@@ -3558,7 +3491,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(neo4j_page_cache_flushes_total{job=\"$job\", instance=~\"$neo4j_instance\"}[5m])",
+          "expr": "rate(neo4j_page_cache_flushes_total{job=\"$job\", instance=~\"$neo4j_instance\"}[$interval])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -3619,7 +3552,7 @@
         "h": 9,
         "w": 8,
         "x": 0,
-        "y": 91
+        "y": 90
       },
       "id": 69,
       "legend": {
@@ -3702,13 +3635,101 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
-      "description": "Neo4j Checkpoints. \nCheckpointing is the process of flushing all pending page updates from the page cache to the store files",
       "fill": 1,
       "gridPos": {
         "h": 9,
         "w": 8,
         "x": 8,
-        "y": 91
+        "y": 90
+      },
+      "id": 51,
+      "legend": {
+        "avg": false,
+        "current": true,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {},
+      "paceLength": 10,
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "label_replace({__name__=~\"neo4j_log_.+\", job=\"$job\", instance=~\"$neo4j_instance\"}, \"label\", \"$1\", \"__name__\", \"neo4j_(.*)\")",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{label}} {{instance}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Neo4j Log Rotation",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "description": "Neo4j Checkpoints. \nCheckpointing is the process of flushing all pending page updates from the page cache to the store files",
+      "fill": 1,
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 0,
+        "y": 99
       },
       "id": 52,
       "legend": {
@@ -3802,8 +3823,8 @@
       "gridPos": {
         "h": 9,
         "w": 8,
-        "x": 16,
-        "y": 91
+        "x": 8,
+        "y": 99
       },
       "id": 85,
       "legend": {
@@ -3881,100 +3902,12 @@
       }
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Prometheus",
-      "fill": 1,
-      "gridPos": {
-        "h": 9,
-        "w": 8,
-        "x": 16,
-        "y": 100
-      },
-      "id": 51,
-      "legend": {
-        "avg": false,
-        "current": true,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {},
-      "paceLength": 10,
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "label_replace({__name__=~\"neo4j_log_.+\", job=\"$job\", instance=~\"$neo4j_instance\"}, \"label\", \"$1\", \"__name__\", \"neo4j_(.*)\")",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "{{label}} {{instance}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Neo4j Log Rotation",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "transparent": true,
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 109
+        "y": 108
       },
       "id": 44,
       "panels": [],
@@ -3993,7 +3926,7 @@
         "h": 9,
         "w": 8,
         "x": 0,
-        "y": 110
+        "y": 109
       },
       "id": 42,
       "legend": {
@@ -4027,20 +3960,44 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "vm_gc_count_g1_old_generation{job=\"$job\", instance=~\"$neo4j_instance\"}",
+          "expr": "{__name__=~\"vm_gc_time_g1_.+_generation_total\", job=\"$job\", instance=~\"$neo4j_instance\"}",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
-          "legendFormat": " {{instance}}",
+          "legendFormat": "{{__name__}} {{instance}}",
           "refId": "A"
         },
         {
-          "expr": "delta(vm_gc_time_g1_old_generation_total{job=\"$job\", instance=~\"$neo4j_instance\"}[30s])",
+          "expr": "delta(vm_gc_time_g1_old_generation_total{job=\"$job\", instance=~\"$neo4j_instance\"}[$interval])",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
-          "legendFormat": "delta {{instance}}",
+          "legendFormat": "delta g1 old g total {{instance}}",
           "refId": "B"
+        },
+        {
+          "expr": "delta(vm_gc_time_g1_young_generation_total{job=\"$job\", instance=~\"$neo4j_instance\"}[$interval])",
+          "format": "time_series",
+          "hide": false,
+          "intervalFactor": 1,
+          "legendFormat": "delta g1 young g total {{instance}}",
+          "refId": "C"
+        },
+        {
+          "expr": "vm_gc_count_g1_old_generation_total",
+          "format": "time_series",
+          "hide": true,
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "D"
+        },
+        {
+          "expr": "vm_gc_count_g1_young_generation_total",
+          "format": "time_series",
+          "hide": true,
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "E"
         }
       ],
       "thresholds": [],
@@ -4091,14 +4048,15 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
+      "decimals": 0,
       "fill": 1,
       "gridPos": {
         "h": 9,
         "w": 8,
         "x": 8,
-        "y": 110
+        "y": 109
       },
-      "id": 86,
+      "id": 60,
       "legend": {
         "alignAsTable": false,
         "avg": false,
@@ -4108,6 +4066,97 @@
         "rightSide": false,
         "show": true,
         "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {},
+      "paceLength": 10,
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "vm_thread_count{job=\"$job\", instance=~\"$neo4j_instance\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "vm live threads {{instance}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "VM Live Threads",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "description": "Heap memory (eden space, old generation, survivor space)\nNon-heap memory (metaspace, compressed class space, code cache)",
+      "fill": 1,
+      "gridPos": {
+        "h": 9,
+        "w": 13,
+        "x": 0,
+        "y": 118
+      },
+      "id": 59,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "max": true,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "total": true,
         "values": true
       },
       "lines": true,
@@ -4126,18 +4175,25 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "{__name__=~\"vm_memory_buffer.*\", job=\"$job\", instance=~\"$neo4j_instance\"}",
+          "expr": "sum({__name__=~\"vm_memory_pool_g1_(eden|old|survivor).*\", job=\"$job\", instance=~\"$neo4j_instance\"}) by (instance)",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "{{__name__}} {{instance}}",
-          "refId": "B"
+          "legendFormat": "{{instance}} heap",
+          "refId": "A"
+        },
+        {
+          "expr": "sum({__name__=~\"vm_memory_pool_(code|compressed|metaspace).*\", job=\"$job\", instance=~\"$neo4j_instance\"}) by (instance)",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{instance}} non-heap",
+          "refId": "C"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "VM Buffer Size",
+      "title": "JVM Heap Size",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -4181,112 +4237,21 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
-      "decimals": 0,
       "fill": 1,
       "gridPos": {
         "h": 9,
-        "w": 8,
-        "x": 16,
-        "y": 110
+        "w": 11,
+        "x": 13,
+        "y": 118
       },
-      "id": 60,
+      "id": 86,
       "legend": {
-        "alignAsTable": false,
+        "alignAsTable": true,
         "avg": false,
         "current": true,
         "max": false,
         "min": false,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {},
-      "paceLength": 10,
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "{__name__=~\"vm_thread.*\", job=\"$job\", instance=~\"$neo4j_instance\"}",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "{{__name__}} {{instance}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "VM Threads",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "transparent": true,
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Prometheus",
-      "fill": 1,
-      "gridPos": {
-        "h": 9,
-        "w": 8,
-        "x": 0,
-        "y": 119
-      },
-      "id": 59,
-      "legend": {
-        "alignAsTable": false,
-        "avg": false,
-        "current": true,
-        "max": false,
-        "min": false,
-        "rightSide": false,
+        "rightSide": true,
         "show": true,
         "total": false,
         "values": true
@@ -4307,18 +4272,25 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "{__name__=~\"vm_memory_pool.*\", job=\"$job\", instance=~\"$neo4j_instance\"}",
+          "expr": "vm_memory_buffer_direct_used{job=\"$job\", instance=~\"$neo4j_instance\"}",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "{{__name__}} {{instance}}",
+          "legendFormat": "memory buffer direct used {{instance}}",
           "refId": "B"
+        },
+        {
+          "expr": "vm_memory_buffer_mapped_used{job=\"$job\", instance=~\"$neo4j_instance\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "memory buffer mapped used{{instance}}",
+          "refId": "A"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "VM Heap Size",
+      "title": "JVM Used Buffer rate",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -4362,7 +4334,284 @@
         "h": 1,
         "w": 24,
         "x": 0,
+        "y": 127
+      },
+      "id": 131,
+      "panels": [],
+      "title": "Container metrics",
+      "type": "row"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "fill": 1,
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
         "y": 128
+      },
+      "id": 127,
+      "legend": {
+        "avg": true,
+        "current": true,
+        "max": true,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {},
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(rate(container_cpu_usage_seconds_total{container_label_com_docker_compose_service=~\"neo4j.+\"}[$interval])) by (container_label_com_docker_compose_service) * 100",
+          "format": "time_series",
+          "hide": false,
+          "intervalFactor": 1,
+          "legendFormat": "{{container_label_com_docker_compose_service}}",
+          "refId": "B"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Neo4j CPU usage",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "percent",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "fill": 1,
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 128
+      },
+      "id": 128,
+      "legend": {
+        "avg": true,
+        "current": true,
+        "max": true,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {},
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(container_memory_rss{container_label_com_docker_compose_service=~\"neo4j.+\"}) by (container_label_com_docker_compose_service)",
+          "format": "time_series",
+          "hide": false,
+          "intervalFactor": 1,
+          "legendFormat": "{{container_label_com_docker_compose_service}}",
+          "refId": "B"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Neo4j Memory usage",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "decbytes",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "fill": 1,
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 128
+      },
+      "id": 129,
+      "legend": {
+        "avg": true,
+        "current": true,
+        "max": true,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {},
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "rate(container_memory_swap{container_label_com_docker_compose_service=~\"neo4j.+\"}[5m])",
+          "format": "time_series",
+          "hide": false,
+          "intervalFactor": 1,
+          "legendFormat": "{{container_label_com_docker_compose_service}}",
+          "refId": "B"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Neo4j swap usage",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "percent",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 136
       },
       "id": 102,
       "panels": [],
@@ -4378,9 +4627,9 @@
       "fill": 1,
       "gridPos": {
         "h": 8,
-        "w": 6,
+        "w": 8,
         "x": 0,
-        "y": 129
+        "y": 137
       },
       "id": 106,
       "legend": {
@@ -4407,7 +4656,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(neo4j_transaction_committed_read_total{job=\"$job\", instance=\"$leader\"}[5m])",
+          "expr": "rate(neo4j_transaction_committed_read_total{job=\"$job\", instance=\"$leader\"}[$interval])",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -4415,7 +4664,7 @@
           "refId": "A"
         },
         {
-          "expr": "sum(rate(neo4j_transaction_committed_read_total{job=\"$job\", instance!=\"$leader\"}[5m]))",
+          "expr": "sum(rate(neo4j_transaction_committed_read_total{job=\"$job\", instance!=\"$leader\"}[$interval]))",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -4475,9 +4724,9 @@
       "fill": 1,
       "gridPos": {
         "h": 8,
-        "w": 6,
-        "x": 6,
-        "y": 129
+        "w": 8,
+        "x": 8,
+        "y": 137
       },
       "id": 97,
       "legend": {
@@ -4504,14 +4753,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(neo4j_transaction_committed_write_total{job=\"$job\", instance=\"$leader\"}[5m])",
+          "expr": "rate(neo4j_transaction_committed_write_total{job=\"$job\", instance=\"$leader\"}[$interval])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Leader {{instance}}",
           "refId": "A"
         },
         {
-          "expr": "sum(rate(neo4j_transaction_committed_write_total{job=\"$job\", instance!=\"$leader\"}[5m]))",
+          "expr": "sum(rate(neo4j_transaction_committed_write_total{job=\"$job\", instance!=\"$leader\"}[$interval]))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Others sum",
@@ -4569,96 +4818,9 @@
       "fill": 1,
       "gridPos": {
         "h": 8,
-        "w": 6,
-        "x": 12,
-        "y": 129
-      },
-      "id": 107,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {},
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "neo4j_causal_clustering_core_message_processing_timer",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "{{instance}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Core message processing",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "transparent": true,
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Prometheus",
-      "fill": 1,
-      "gridPos": {
-        "h": 8,
-        "w": 6,
-        "x": 18,
-        "y": 129
+        "w": 8,
+        "x": 16,
+        "y": 137
       },
       "id": 108,
       "legend": {
@@ -4685,7 +4847,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(neo4j_causal_clustering_read_replica_pull_updates_total[5m])",
+          "expr": "rate(neo4j_causal_clustering_read_replica_pull_updates_total[$interval])",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -4734,12 +4896,180 @@
       }
     },
     {
+      "cards": {
+        "cardPadding": null,
+        "cardRound": null
+      },
+      "color": {
+        "cardColor": "#b4ff00",
+        "colorScale": "sqrt",
+        "colorScheme": "interpolateBlues",
+        "exponent": 0.5,
+        "mode": "spectrum"
+      },
+      "dataFormat": "tsbuckets",
+      "datasource": "Prometheus",
+      "gridPos": {
+        "h": 8,
+        "w": 10,
+        "x": 0,
+        "y": 145
+      },
+      "heatmap": {},
+      "hideZeroBuckets": true,
+      "highlightCards": true,
+      "id": 107,
+      "legend": {
+        "show": true
+      },
+      "links": [],
+      "options": {},
+      "reverseYBuckets": true,
+      "targets": [
+        {
+          "expr": "neo4j_causal_clustering_core_message_processing_timer{job=\"$job\", instance=~\"$neo4j_instance\"} * 10000",
+          "format": "time_series",
+          "hide": false,
+          "intervalFactor": 1,
+          "legendFormat": "{{quantile}} {{instance}}",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Core message processing",
+      "tooltip": {
+        "show": true,
+        "showHistogram": false
+      },
+      "transparent": true,
+      "type": "heatmap",
+      "xAxis": {
+        "show": true
+      },
+      "xBucketNumber": null,
+      "xBucketSize": null,
+      "yAxis": {
+        "decimals": null,
+        "format": "short",
+        "logBase": 1,
+        "max": null,
+        "min": null,
+        "show": true,
+        "splitFactor": null
+      },
+      "yBucketBound": "upper",
+      "yBucketNumber": null,
+      "yBucketSize": null
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "fill": 1,
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 10,
+        "y": 145
+      },
+      "id": 135,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {},
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "/count\\s.+/",
+          "yaxis": 2
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "neo4j_causal_clustering_core_message_processing_timer_election_timeout{job=\"$job\", instance=~\"$neo4j_instance\", quantile=\"0.5\"} * 10000",
+          "format": "time_series",
+          "hide": false,
+          "intervalFactor": 1,
+          "legendFormat": "median {{instance}}",
+          "refId": "A"
+        },
+        {
+          "expr": "neo4j_causal_clustering_core_message_processing_timer_election_timeout_count{job=\"$job\", instance=~\"$neo4j_instance\"}",
+          "format": "time_series",
+          "hide": false,
+          "intervalFactor": 1,
+          "legendFormat": "count {{instance}}",
+          "refId": "B"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Core election timeout ",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 137
+        "y": 153
       },
       "id": 47,
       "panels": [],
@@ -4757,7 +5087,7 @@
         "h": 9,
         "w": 8,
         "x": 0,
-        "y": 138
+        "y": 154
       },
       "id": 49,
       "legend": {
@@ -4785,10 +5115,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "label_replace({__name__=~\"neo4j_cypher.*\", job='$job'}, \"label\", \"$1\", \"__name__\", \"neo4j_(.+)\")",
+          "expr": "neo4j_cypher_replan_events_total{job=\"$job\", instance=~\"$neo4j_instance\"}",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "{{label}}",
+          "legendFormat": "{{__name__}} {{instance}}",
           "refId": "A"
         }
       ],
@@ -4796,7 +5126,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Cyper stats",
+      "title": "Cyper replan events",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -4835,12 +5165,101 @@
       }
     },
     {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "description": "The total number of seconds waited between query replans",
+      "fill": 1,
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 8,
+        "y": 154
+      },
+      "id": 136,
+      "legend": {
+        "avg": false,
+        "current": true,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {},
+      "paceLength": 10,
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "neo4j_cypher_replan_wait_time_total{job=\"$job\", instance=~\"$neo4j_instance\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{__name__}} {{instance}}",
+          "refId": "B"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Cyper wait time",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "ms",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 147
+        "y": 163
       },
       "id": 78,
       "panels": [],
@@ -4848,7 +5267,7 @@
       "type": "row"
     }
   ],
-  "refresh": "5s",
+  "refresh": false,
   "schemaVersion": 18,
   "style": "dark",
   "tags": [
@@ -4885,7 +5304,9 @@
         "allValue": null,
         "current": {
           "text": "All",
-          "value": "$__all"
+          "value": [
+            "$__all"
+          ]
         },
         "datasource": "Prometheus",
         "definition": "label_values(instance)",
@@ -4909,9 +5330,9 @@
       {
         "allValue": "",
         "current": {
-          "isNone": true,
-          "text": "None",
-          "value": ""
+          "selected": true,
+          "text": "neo4j-core1:2004",
+          "value": "neo4j-core1:2004"
         },
         "datasource": "Prometheus",
         "definition": "query_result(neo4j_causal_clustering_core_is_leader == 1)",
@@ -4931,12 +5352,105 @@
         "tagsQuery": "",
         "type": "query",
         "useTags": false
+      },
+      {
+        "auto": true,
+        "auto_count": 30,
+        "auto_min": "30s",
+        "current": {
+          "text": "auto",
+          "value": "$__auto_interval_interval"
+        },
+        "hide": 0,
+        "label": null,
+        "name": "interval",
+        "options": [
+          {
+            "selected": true,
+            "text": "auto",
+            "value": "$__auto_interval_interval"
+          },
+          {
+            "selected": false,
+            "text": "30s",
+            "value": "30s"
+          },
+          {
+            "selected": false,
+            "text": "1m",
+            "value": "1m"
+          },
+          {
+            "selected": false,
+            "text": "2m",
+            "value": "2m"
+          },
+          {
+            "selected": false,
+            "text": "3m",
+            "value": "3m"
+          },
+          {
+            "selected": false,
+            "text": "5m",
+            "value": "5m"
+          },
+          {
+            "selected": false,
+            "text": "10m",
+            "value": "10m"
+          },
+          {
+            "selected": false,
+            "text": "30m",
+            "value": "30m"
+          },
+          {
+            "selected": false,
+            "text": "1h",
+            "value": "1h"
+          },
+          {
+            "selected": false,
+            "text": "6h",
+            "value": "6h"
+          },
+          {
+            "selected": false,
+            "text": "12h",
+            "value": "12h"
+          },
+          {
+            "selected": false,
+            "text": "1d",
+            "value": "1d"
+          },
+          {
+            "selected": false,
+            "text": "7d",
+            "value": "7d"
+          },
+          {
+            "selected": false,
+            "text": "14d",
+            "value": "14d"
+          },
+          {
+            "selected": false,
+            "text": "30d",
+            "value": "30d"
+          }
+        ],
+        "query": "30s,1m,2m,3m,5m,10m,30m,1h,6h,12h,1d,7d,14d,30d",
+        "refresh": 2,
+        "skipUrlSync": false,
+        "type": "interval"
       }
     ]
   },
   "time": {
-    "from": "now-3h",
-    "to": "now"
+    "from": "2019-06-18T10:43:44.552Z",
+    "to": "2019-06-18T11:44:59.944Z"
   },
   "timepicker": {
     "refresh_intervals": [
